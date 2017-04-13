@@ -1,14 +1,14 @@
 #
 #  Makefile for building pyenchant win32 dependencies.
 #
-BUILD_DIR = /c/Users/rfk/Documents/GitHub/pyenchant/tools/pyenchant-bdist-win32-sources/build
+BUILD_DIR = $(PWD)/build
 ENCHANT_DIR = enchant-1.6.0
 
-ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell
+ENCHANT_CONFIG_OPTS = --enable-ispell --enable-myspell --disable-aspell --disable-dependency-tracking --disable-maintainer-mode --with-pic
 CC = gcc
-CXX = g++ -static-libgcc -static-libstdc++
-ENCHANT_CFLAGS = -I$(BUILD_DIR)/include/glib-2.0
-ENCHANT_LIBS = -L$(BUILD_DIR)/lib -lglib-2.0-0 -lgmodule-2.0-0
+CXX = g++
+ENCHANT_CFLAGS = -I$(BUILD_DIR)/include/glib-2.0 -static-libgcc -static-libstdc++
+#ENCHANT_LIBS = -L$(BUILD_DIR)/lib -lglib-2.0 -lgmodule-2.0
 
 all: $(BUILD_DIR)/lib/libenchant.dll $(BUILD_DIR)/share/enchant/myspell/en_GB.dic \
 	$(BUILD_DIR)/share/enchant/myspell/en_US.dic $(BUILD_DIR)/share/enchant/myspell/de_DE.dic \
@@ -25,9 +25,10 @@ $(BUILD_DIR)/lib/libenchant.dll: $(ENCHANT_DIR)/Makefile
 $(ENCHANT_DIR)/Makefile: src/$(ENCHANT_DIR).tar.gz
 	rm -rf $(ENCHANT_DIR)
 	tar -xzvf src/$(ENCHANT_DIR).tar.gz
-	patch $(ENCHANT_DIR)/src/enchant.c < patches/relocatable.patch
-	patch $(ENCHANT_DIR)/src/myspell/myspell_checker.cpp < patches/myspell_checker.patch
-	patch $(ENCHANT_DIR)/src/enchant-provider.h < patches/dllmain.patch
+# FIXME are these patches still needed? It seems to work fine without them
+#	patch $(ENCHANT_DIR)/src/enchant.c < patches/relocatable.patch
+#	patch $(ENCHANT_DIR)/src/myspell/myspell_checker.cpp < patches/myspell_checker.patch
+#	patch $(ENCHANT_DIR)/src/enchant-provider.h < patches/dllmain.patch
 	cd $(ENCHANT_DIR) && ./configure CC="$(CC)" CXX="$(CXX)" ENCHANT_CFLAGS="$(ENCHANT_CFLAGS)" ENCHANT_LIBS="$(ENCHANT_LIBS)" $(ENCHANT_CONFIG_OPTS)
 
 
