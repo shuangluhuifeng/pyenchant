@@ -6,13 +6,15 @@
 *~
 *.pyc
 __pycache__/
-build/
+build/*
 dist/
 tools/pyenchant-bdist-osx-sources/enchant-1.*
 *.egg
 *.egg-info
 *.swp
-*.dll
+enchant/*.dll
+enchant/lib/enchant/*.dll
+#*.dll
 *.dic
 *.aff
 *.dylib
