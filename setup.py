@@ -16,6 +16,7 @@ import sys
 import os
 import shutil
 import errno
+import platform
 
 setup_kwds = {}
 if sys.version_info > (3,):
@@ -24,8 +25,12 @@ if sys.version_info > (3,):
 
 # Location of the prebuilt binaries, if available
 if sys.platform == "win32":
-    BINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
-    DYLIB_EXT = ".dll"
+    if platform.machine() == "AMD64":
+        BINDEPS = ".\\tools\\pyenchant-bdist-win64-sources\\build"
+        DYLIB_EXT = ".dll"
+    else:
+        BINDEPS = ".\\tools\\pyenchant-bdist-win32-sources\\build"
+        DYLIB_EXT = ".dll"
 elif sys.platform == "darwin":
     BINDEPS = "./tools/pyenchant-bdist-osx-sources/build"
     DYLIB_EXT = ".dylib"
